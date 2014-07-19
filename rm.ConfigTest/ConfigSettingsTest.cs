@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Threading;
 using NUnit.Framework;
 using rm.Config;
 
@@ -70,6 +71,30 @@ namespace rm.ConfigTest
                 ConfigSettings.GetSection("CustomConfig")["Key1"]);
             Assert.AreEqual("Value2 (from config section) (override)",
                 ConfigSettings.GetSection("CustomConfig")["Key2"]);
+        }
+        [Test]
+        public void InstancesCountCheck01()
+        {
+            var count = 100;
+            Thread[] threads = new Thread[count * 2];
+            for (int i = 0; i < count; i++)
+            {
+                threads[i] = new Thread(() => ConfigSettings.GetSection("CustomConfig"));
+            }
+            for (int i = count; i < count * 2; i++)
+            {
+                threads[i] = new Thread(() => ConfigSettings.GetByPrefix("CustomConfig"));
+            }
+            for (int i = 0; i < count * 2; i++)
+            {
+                threads[i].Start();
+            }
+            for (int i = 0; i < count * 2; i++)
+            {
+                threads[i].Join();
+            }
+            Assert.AreEqual(1, ConfigSettings.ConfigSectionCache.Keys.Count);
+            Assert.AreEqual(1, ConfigSettings.AppSettingsCache.Keys.Count);
         }
     }
 }

@@ -111,5 +111,6 @@ Or using `configSource`:
 - Indexer interface.
 - Moving keys between `appSettings` and `configSection` results in small code change.
 - Returns `null` as value if key does not exists in `configSection` instead of throwing (similar to `appSettings`).
+- Redundant instances are avoided by using an internal dictionary.
 - Ability to override settings for `appSettings` or `configSection` using the `file` attribute (by using `NameValueFileSectionHandler`).
 - Overrides are useful for DEV, STG, PRD environments. Each environment will have an override file and a build program picks the corresponding file.

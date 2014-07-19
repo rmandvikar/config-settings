@@ -10,6 +10,17 @@ namespace rm.Config
     /// </summary>
     public static class ConfigSettings
     {
+        private static readonly object monitor = new object();
+        /// <summary>
+        /// Dictionary for appSettings config-settings by prefix.
+        /// </summary>
+        internal static readonly IDictionary<string, AppSettingsConfigSettings> AppSettingsCache =
+            new Dictionary<string, AppSettingsConfigSettings>();
+        /// <summary>
+        /// Dictionary for configSection config-settings by sectionName.
+        /// </summary>
+        internal static readonly IDictionary<string, ConfigSectionConfigSettings> ConfigSectionCache =
+            new Dictionary<string, ConfigSectionConfigSettings>();
         /// <summary>
         /// Empty nvc.
         /// </summary>
@@ -27,9 +38,21 @@ namespace rm.Config
             {
                 throw new ArgumentException("sectionName");
             }
-            return new ConfigSectionConfigSettings(
-                (NameValueCollection)ConfigurationManager.GetSection(sectionName) ?? emptyNvc
-                );
+            ConfigSectionConfigSettings configsettings;
+            if (!ConfigSectionCache.TryGetValue(sectionName, out configsettings))
+            {
+                lock (monitor)
+                {
+                    if (!ConfigSectionCache.TryGetValue(sectionName, out configsettings))
+                    {
+                        configsettings = new ConfigSectionConfigSettings(
+                            (NameValueCollection)ConfigurationManager.GetSection(sectionName) ?? emptyNvc
+                            );
+                        ConfigSectionCache.Add(sectionName, configsettings);
+                    }
+                }
+            }
+            return configsettings;
         }
         /// <summary>
         /// Get config-settings by prefix.
@@ -44,7 +67,19 @@ namespace rm.Config
             {
                 throw new ArgumentException("prefix");
             }
-            return new AppSettingsConfigSettings(ConfigurationManager.AppSettings, prefix);
+            AppSettingsConfigSettings configsettings;
+            if (!AppSettingsCache.TryGetValue(prefix, out configsettings))
+            {
+                lock (monitor)
+                {
+                    if (!AppSettingsCache.TryGetValue(prefix, out configsettings))
+                    {
+                        configsettings = new AppSettingsConfigSettings(ConfigurationManager.AppSettings, prefix);
+                        AppSettingsCache.Add(prefix, configsettings);
+                    }
+                }
+            }
+            return configsettings;
         }
     }
 }
