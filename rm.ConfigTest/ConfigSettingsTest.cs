@@ -55,5 +55,21 @@ namespace rm.ConfigTest
             Assert.AreEqual((string)null,
                 ConfigSettings.GetSection("CustomConfig")["key-does-not-exist"]);
         }
+        [Test]
+        public void AppSettingsConfigSource01()
+        {
+            Assert.AreEqual("Value1 (from app settings) (override)",
+                ConfigSettings.GetByPrefix("CustomConfig")["Key1"]);
+            Assert.AreEqual("Value2 (from app settings) (override)",
+                ConfigSettings.GetByPrefix("CustomConfig")["Key2"]);
+        }
+        [Test]
+        public void CustomConfigSource01()
+        {
+            Assert.AreEqual("Value1 (from config section) (override)",
+                ConfigSettings.GetSection("CustomConfig")["Key1"]);
+            Assert.AreEqual("Value2 (from config section) (override)",
+                ConfigSettings.GetSection("CustomConfig")["Key2"]);
+        }
     }
 }

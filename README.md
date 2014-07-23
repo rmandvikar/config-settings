@@ -35,7 +35,7 @@ string value = ConfigSettings.GetSection("CustomConfig")["Key1"];
 
 ####Overriding a key's value:
 
-For `appSettings`:
+#####For `appSettings`:
 ```c#
 <!-- App.config or Web.config -->
 <appSettings file="AppSettings-override.config">
@@ -48,14 +48,52 @@ For `appSettings`:
   <add key="CustomConfig.Key1" value="Value1 (from app settings) (override)"/>
 </appSettings>
 ```
+Or using `configSource`:
+```c#
+<!-- App.config or Web.config -->
+<appSettings configSource="AppSettings.config" />
+```
+```c#
+<!-- AppSettings.config -->
+<appSettings file="AppSettings-override.config">
+  <add key="CustomConfig.Key1" value="Value1 (from app settings)"/>
+</appSettings>
+```
+```c#
+<!-- AppSettings-override.config -->
+<appSettings>
+  <add key="CustomConfig.Key1" value="Value1 (from app settings) (override)"/>
+</appSettings>
+```
 
-For `configSection`:
+#####For `configSection`:
 ```c#
 <!-- App.config or Web.config -->
 <configSections>
   <!-- Note the NameValueFileSectionHandler type -->
   <section name="CustomConfig" type="System.Configuration.NameValueFileSectionHandler" />
 </configSections>
+<CustomConfig file="CustomConfig-override.config">
+  <add key="Key1" value="Value1 (from config section)"/>
+</CustomConfig>
+```
+```c#
+<!-- CustomConfig-override.config -->
+<CustomConfig>
+  <add key="Key1" value="Value1 (from config section) (override)"/>
+</CustomConfig>
+```
+Or using `configSource`:
+```c#
+<!-- App.config or Web.config -->
+<configSections>
+  <!-- Note the NameValueFileSectionHandler type -->
+  <section name="CustomConfig" type="System.Configuration.NameValueFileSectionHandler" />
+</configSections>
+<CustomConfig configSource="CustomConfig.config" />
+```
+```c#
+<!-- CustomConfig.config -->
 <CustomConfig file="CustomConfig-override.config">
   <add key="Key1" value="Value1 (from config section)"/>
 </CustomConfig>
