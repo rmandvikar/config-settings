@@ -3,7 +3,7 @@ config-settings
 Utility classes to access keys in `appSettings` or `configSections` and their overrides.
 
 
-####Accessing key's value:
+#### Accessing key's value:
 
 The typical way is cumbersome for `configSection`:
 
@@ -33,9 +33,9 @@ string value = ConfigSettings.GetSection("CustomConfig")["Key1"];
 ```
 
 
-####Overriding a key's value:
+#### Overriding a key's value:
 
-#####For `appSettings`:
+##### For `appSettings`:
 ```c#
 <!-- App.config or Web.config -->
 <appSettings file="AppSettings-override.config">
@@ -66,7 +66,7 @@ Or using `configSource`:
 </appSettings>
 ```
 
-#####For `configSection`:
+##### For `configSection`:
 ```c#
 <!-- App.config or Web.config -->
 <configSections>
@@ -106,7 +106,7 @@ Or using `configSource`:
 ```
 
 
-####Advantages:
+#### Advantages:
 
 - Indexer interface.
 - Moving keys between `appSettings` and `configSection` results in small code change.
