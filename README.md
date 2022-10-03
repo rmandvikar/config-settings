@@ -13,22 +13,22 @@ string value = ((NameValueCollection)ConfigurationManager.GetSection("CustomConf
 ```
 
 A key placed in `appSettings` with a naming convention can be accessed as:
-```c#
+```xml
 <appSettings>
   <add key="CustomConfig.Key1" value="..."/>
 </appSettings>
 ```
-```c#
+```xml
 string value = ConfigSettings.GetByPrefix("CustomConfig")["Key1"];
 ```
 
 A key placed in `configSection` can be accessed as:
-```c#
+```xml
 <CustomConfig>
   <add key="Key1" value="..."/>
 </CustomConfig>
 ```
-```c#
+```xml
 string value = ConfigSettings.GetSection("CustomConfig")["Key1"];
 ```
 
@@ -36,30 +36,30 @@ string value = ConfigSettings.GetSection("CustomConfig")["Key1"];
 #### Overriding a key's value:
 
 ##### For `appSettings`:
-```c#
+```xml
 <!-- App.config or Web.config -->
 <appSettings file="AppSettings-override.config">
   <add key="CustomConfig.Key1" value="Value1 (from app settings)"/>
 </appSettings>
 ```
-```c#
+```xml
 <!-- AppSettings-override.config -->
 <appSettings>
   <add key="CustomConfig.Key1" value="Value1 (from app settings) (override)"/>
 </appSettings>
 ```
 Or using `configSource`:
-```c#
+```xml
 <!-- App.config or Web.config -->
 <appSettings configSource="AppSettings.config" />
 ```
-```c#
+```xml
 <!-- AppSettings.config -->
 <appSettings file="AppSettings-override.config">
   <add key="CustomConfig.Key1" value="Value1 (from app settings)"/>
 </appSettings>
 ```
-```c#
+```xml
 <!-- AppSettings-override.config -->
 <appSettings>
   <add key="CustomConfig.Key1" value="Value1 (from app settings) (override)"/>
@@ -67,7 +67,7 @@ Or using `configSource`:
 ```
 
 ##### For `configSection`:
-```c#
+```xml
 <!-- App.config or Web.config -->
 <configSections>
   <!-- Note the NameValueFileSectionHandler type -->
@@ -77,14 +77,14 @@ Or using `configSource`:
   <add key="Key1" value="Value1 (from config section)"/>
 </CustomConfig>
 ```
-```c#
+```xml
 <!-- CustomConfig-override.config -->
 <CustomConfig>
   <add key="Key1" value="Value1 (from config section) (override)"/>
 </CustomConfig>
 ```
 Or using `configSource`:
-```c#
+```xml
 <!-- App.config or Web.config -->
 <configSections>
   <!-- Note the NameValueFileSectionHandler type -->
@@ -92,13 +92,13 @@ Or using `configSource`:
 </configSections>
 <CustomConfig configSource="CustomConfig.config" />
 ```
-```c#
+```xml
 <!-- CustomConfig.config -->
 <CustomConfig file="CustomConfig-override.config">
   <add key="Key1" value="Value1 (from config section)"/>
 </CustomConfig>
 ```
-```c#
+```xml
 <!-- CustomConfig-override.config -->
 <CustomConfig>
   <add key="Key1" value="Value1 (from config section) (override)"/>
